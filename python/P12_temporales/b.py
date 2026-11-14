@@ -5,9 +5,10 @@ Analiza el archivo con SAST; no es necesario ejecutarlo. Compara las dos variant
 import os
 import tempfile
 def procesar(texto):
-    nombre = tempfile.mktemp()
+    f = tempfile.NamedTemporaryFile(mode="w", delete=False, encoding="utf-8")
+    nombre = f.name
     try:
-        with open(nombre, "w", encoding="utf-8") as f:
+        with f:
             f.write(texto)
         with open(nombre, encoding="utf-8") as f:
             return f.read()
