@@ -4,9 +4,16 @@ Analiza el archivo con SAST; no es necesario ejecutarlo. Compara las dos variant
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 int mostrar(const char *etiqueta) {
-    char comando[256];
-    int n = snprintf(comando, sizeof comando, "echo %s", etiqueta);
-    if (n < 0 || (size_t)n >= sizeof comando) return 1;
-    return system(comando);
+    pid_t pid = fork();
+    if (pid < 0) return 1;
+    if (pid == 0) {
+        execlp("echo", "echo", etiqueta, (char *)NULL);
+        _exit(127);
+    }
+    int status;
+    if (waitpid(pid, &status, 0) < 0) return 1;
+    return WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 }
