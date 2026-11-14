@@ -3,6 +3,6 @@ El requisito es buscar un fragmento literal, con un máximo de 64 caracteres. El
 Analiza el archivo con SAST; no es necesario ejecutarlo. Compara las dos variantes. */
 
 function coincide(nombre, filtro) {
-    return new RegExp(filtro).test(nombre);
+    return nombre.includes(filtro);
 }
 module.exports = { coincide };
